@@ -21,6 +21,8 @@ import java.util.stream.Stream;
 import static com.power.doc.constants.DocGlobalConstants.NO_COMMENTS_FOUND;
 import static com.power.doc.constants.DocTags.IGNORE;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class SourceBuilder {
 
     private static final String GET_MAPPING = "GetMapping";
@@ -451,11 +453,11 @@ public class SourceBuilder {
         // Registry class
         registryClasses.put(className, className);
         String simpleName = DocClassUtil.getSimpleName(className);
-        System.out.println("simpleName:"+simpleName);
+        //System.out.println("simpleName:"+simpleName);
         String[] globGicName = DocClassUtil.getSimpleGicName(className);
         JavaClass cls = this.getJavaClass(simpleName);
         List<JavaField> fields = this.getFields(cls, 0);
-        System.out.println("字段李彪长度："+fields.size());
+        //System.out.println("字段长度："+fields.size());
         int n = 0;
         if (DocClassUtil.isPrimitive(simpleName)) {
             paramList.addAll(primitiveReturnRespComment(DocClassUtil.processTypeNameForParams(simpleName)));
@@ -755,13 +757,21 @@ public class SourceBuilder {
         StringBuilder data = new StringBuilder();
         if (DocClassUtil.isCollection(typeName) || DocClassUtil.isArray(typeName)) {
             data.append("[");
+            
+            String gNameTemp;
+            String gName;
             if (globGicName.length == 0) {
                 data.append("{\"object\":\"any object\"}");
                 data.append("]");
                 return data.toString();
+            } else if (globGicName.length == 2) {
+                gNameTemp = globGicName[1];
+                gName = DocClassUtil.isArray(typeName) ? gNameTemp.substring(0, gNameTemp.indexOf("[")) : globGicName[0];
+            } else {
+                gNameTemp = globGicName[0];
+                gName = DocClassUtil.isArray(typeName) ? gNameTemp.substring(0, gNameTemp.indexOf("[")) : globGicName[0];
             }
-            String gNameTemp = globGicName[0];
-            String gName = DocClassUtil.isArray(typeName) ? gNameTemp.substring(0, gNameTemp.indexOf("[")) : globGicName[0];
+           
             if (DocGlobalConstants.JAVA_OBJECT_FULLY.equals(gName)) {
                 data.append("{\"waring\":\"You may use java.util.Object instead of display generics in the List\"}");
             } else if (DocClassUtil.isPrimitive(gName)) {
@@ -1009,7 +1019,7 @@ public class SourceBuilder {
             String mockValue = "";
             if (DocClassUtil.isPrimitive(simpleTypeName)) {
                 mockValue = paramsComments.get(paraName);
-                if(mockValue.contains("|")){
+                if(StringUtils.contains(mockValue, "|")) {
                     mockValue = mockValue.substring(mockValue.lastIndexOf("|") + 1, mockValue.length());
                 } else {
                     mockValue ="";
