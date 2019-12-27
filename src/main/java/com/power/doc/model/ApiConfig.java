@@ -34,7 +34,11 @@ public class ApiConfig {
      */
     private String outPath;
 
-
+    /**
+     * input code src
+     */
+    private String srcCodePath;
+    
     /**
      * source path
      */
@@ -275,5 +279,13 @@ public class ApiConfig {
 
     public void setShowAuthor(boolean showAuthor) {
         this.showAuthor = showAuthor;
+    }
+    
+    public String getSrcCodePath() {
+        return srcCodePath;
+    }
+
+    public void setSrcCodePath(String srcCodePath) {
+        this.srcCodePath = srcCodePath;
     }
 }
