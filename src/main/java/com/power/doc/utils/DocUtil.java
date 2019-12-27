@@ -292,8 +292,11 @@ public class DocUtil {
         for (DocletTag docletTag : paramTags) {
             String value = docletTag.getValue();
             if (StringUtil.isEmpty(value)&&StringUtil.isNotEmpty(className)) {
-                throw new RuntimeException("ERROR: #" + javaMethod.getName()
-                        + "() - bad @" + tagName + " javadoc from " + className + ", must be add comment if you use it.");
+                // throw new RuntimeException("ERROR: #" + javaMethod.getName()
+                //         + "() - bad @" + tagName + " javadoc from " + className + ", must be add comment if you use it.");
+                System.out.println(
+                    "Method:#" + javaMethod.getName() + "(),@" + tagName + ",line number:" + javaMethod.getLineNumber()
+                        + ", class name:" + className + ", must be add comment if you use it.");
             }
             String pName;
             String pValue;
